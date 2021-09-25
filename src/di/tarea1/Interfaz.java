@@ -5,6 +5,9 @@
  */
 package di.tarea1;
 
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Nico
@@ -16,7 +19,8 @@ public class Interfaz extends javax.swing.JFrame {
      */
     public Interfaz() {
         initComponents();
-        this.setSize(725,500);
+        this.setSize(725, 500);
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -112,12 +116,45 @@ public class Interfaz extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        
-        //
+
+        String dni = null;
+        String modulo = null;
+        double nota = 0;
+        double recuperacion = 0;
+
+        if (txt_dni.getText().isEmpty() || txt_modulo.getText().isEmpty() || txt_nota.getText().isEmpty() || txt_recuperacion.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debe rellenar todos los campos.", "Error", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            try {
+                dni = txt_dni.getText();
+                modulo = txt_modulo.getText();
+                nota = Double.parseDouble(txt_nota.getText());
+                recuperacion = Double.parseDouble(txt_recuperacion.getText());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Debe introducir un numero", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            if (nota >= 0 && nota <= 10) {
+                if (recuperacion >= 0 && recuperacion <= 5) {
+                    DefaultTableModel modelo = (DefaultTableModel) calificaciones.getModel();
+                    Object entrada[] = {dni, modulo, nota, recuperacion};
+                    modelo.addRow(entrada);
+                    JOptionPane.showMessageDialog(null, "Datos introducidos correctamente", "Información", JOptionPane.PLAIN_MESSAGE);
+                    limpiarCampos();
+                } else {
+                    JOptionPane.showMessageDialog(null, "El valor RECUPERACIÓN debe estar comprendido entre 0 y 5", "Error", JOptionPane.WARNING_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "El valor NOTA debe estar comprendido entre 0 y 10", "Error", JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-  
+    private void limpiarCampos() {
+        txt_dni.setText("");
+        txt_modulo.setText("");
+        txt_nota.setText("");
+        txt_recuperacion.setText("");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable calificaciones;
